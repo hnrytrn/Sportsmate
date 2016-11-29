@@ -11,11 +11,11 @@
 
     <title>Sportsmate</title>
 
-    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
 
-    <link href="../static/css/landing-page.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/landing-page.css') }}" rel="stylesheet">
 
-    <link href="../static/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -55,26 +55,6 @@
         </div>
     </nav>
 
-
-    <a name="about"></a>
-    <div class="intro-header">
-        <div class="container">
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="intro-message">
-                        <h1>Sportsmate</h1>
-                        <h3>Play your favourite sports at anytime!</h3>
-                        <hr class="intro-divider">
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-
-
 	<a  name="search"></a>
     <div class="content-section-b">
 
@@ -83,31 +63,7 @@
                 <div class="col-md-9 col-md-offset-1">
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
-                    <h2 class="section-heading">Play Now: Search for a nearby sports event</h2>
-                    <form action="/search" method=get>
-                      <div class="form-group">
-                        <label for="sport">Sport</label>
-                        <select name="sport" id="sport">
-                            <option value="basketball">Basketball</option>
-                            <option value="soccer">Soccer</option>
-                            <option value="hockey">Hockey</option>
-                            <option value="audi">Tennis</option>
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="country">Country</label>
-                        <input type="text" class="form-control" name="country" id="country">
-                      </div>
-                      <div class="form-group">
-                        <label for="city">City</label>
-                        <input type="text" class="form-control" name="city" id="city">
-                      </div>
-                      <div class="form-group">
-                          <label for="date">Date</label>
-                          <input type="date" class="form-control" name="date" id="date">
-                      </div>
-                      <button type="submit" class="btn btn-primary">Search</button>
-                    </form>
+                    <h2 class="section-heading">Sport Events</h2>
                 </div>
 
             </div>
@@ -132,6 +88,7 @@
                         <li>
                             <a href="#">Create a Sport</a>
                         </li>
+                        <li class="footer-menu-divider">&sdot;</li>
                     </ul>
                     <p class="copyright text-muted small">Copyright &copy; Sportsmate 2016. All Rights Reserved</p>
                 </div>
@@ -139,8 +96,8 @@
         </div>
     </footer>
 
-    <script src="../static/js/jquery.js"></script>
-    <script src="../static/js/bootstrap.min.js"></script>
+    <script src={{ url_for('static', filename='static/js/jquery.js') }}></script>
+    <script src={{ url_for('static', filename='static/js/bootstrap.min.js') }}></script>
 </body>
 
 </html>

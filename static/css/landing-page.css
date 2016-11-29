@@ -155,3 +155,8 @@ footer {
 p.copyright {
     margin: 15px 0 0;
 }
+
+.event {
+    background-color: #999999;
+    margin: 5px;
+}

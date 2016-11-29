@@ -39,19 +39,26 @@ class UserEvent(Base):
 
 session = create_session(bind=engine)
 
-testlist = session.query(Sport).all()
-
-for test in testlist:
-    print test.SportName
 
 # Homepage route
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # Load all the available sports
+    sports = session.query(Sport).all()
+    return render_template('index.html', sports = sports)
 
 @app.route('/sportevents/<sport>/<country>/<city>/<date>')
 def sportevents(sport, country, city, date):
-    return render_template('events.html')
+    # Query SportEvent to find matching events
+    events = session.query(SportEvent).join(Location).\
+        filter(sport == SportEvent.SportName).\
+        filter(country == Location.Country).\
+        filter(city == Location.City).\
+        filter(date == func.DATE(SportEvent.StartTime)).\
+        all()
+
+    print events
+    return render_template('events.html', events = events)
 
 # Sports event search form
 @app.route('/search', methods=['GET'])

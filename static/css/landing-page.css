@@ -157,6 +157,11 @@ p.copyright {
 }
 
 .event {
-    background-color: #999999;
-    margin: 5px;
+    background-color: #f8f8f8;
+    padding: 10px;
+    margin: 20px;
+}
+
+.error {
+    color: red;
 }

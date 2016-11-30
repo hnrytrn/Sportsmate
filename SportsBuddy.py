@@ -120,5 +120,21 @@ def authenticate():
             error = "Username and password does not match"
             return render_template('login.html', authError = error)
 
+# Create sport event page route
+@app.route('/createevent')
+def createevent():
+    # Load all the available sports
+    sports = dbSession.query(Sport).all()
+    return render_template('create.html', sports=sports)
+
+# Add a new sport event form route
+# @app.route('addevent', methods=['POST'])
+# def addevent():
+#     if request.method == 'POST':
+
+
 if __name__ == '__main__':
     app.run(debug = True)
+
+# TODO
+# -make all form fields that are required required and accompany other form fields in the route

@@ -20,7 +20,7 @@
                     <p>{{ event.Description }}</p>
                     <p>{{ event.StartTime }}</p>
                     <p>{{ event.EndTime }}</p>
-                    <a href="{{ url_for('joinevent',eventID = event.EventID) }}"><i class="fa fa-3x fa-sign-in" aria-hidden="true"></i></a>
+                    <a href="{{ url_for('joinevent',eID = event.EventID) }}"><i class="fa fa-3x fa-sign-in" aria-hidden="true"></i></a>
                 </div>
             {% endfor %}
         </div>

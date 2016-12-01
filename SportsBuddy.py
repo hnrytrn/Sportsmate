@@ -230,6 +230,43 @@ def modifyevent(eID, lID):
 
         return redirect(url_for('myevents'))
 
+# Route for joining events
+@app.route('/joinevent/<eID>')
+def joinevent(eID):
+    user = session['user']
+    # Check if the event is full
+    if dbSession.query(SportEvent).filter(SportEvent.EventID == eID).first().IsFull:
+        return redirect(url_for('index'))
+    # Check if user is already in the event
+    if dbSession.query(UserEvent). \
+            filter(UserEvent.EventID == eID). \
+            filter(UserEvent.Username == user).\
+            all():
+        return redirect(url_for('index'))
+
+    # Add user to the event
+    newUserEvent = UserEvent(Username=user, EventID=eID)
+    dbSession.add(newUserEvent)
+    dbSession.flush()
+
+    # Check if the Event is full now
+    currUsers = dbSession.query(SportEvent).join(UserEvent). \
+        filter(UserEvent.EventID == eID). \
+        count()
+    # Get player limit of the event
+    maxUsers = dbSession.query(SportEvent).join(Sport). \
+        filter(SportEvent.EventID == eID). \
+        first() .\
+        PlayerLimit
+
+    if currUsers == maxUsers:
+        event = dbSession.query(SportEvent).filter(SportEvent.EventID == eID).first()
+        event.IsFull = 1
+        dbSession.add(event)
+        dbSession.flush()
+
+    return redirect(url_for('index'))
+
 if __name__ == '__main__':
     app.run(debug = True)
 

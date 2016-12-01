@@ -162,7 +162,7 @@ def addevent():
 def myevents():
     if not session.has_key('user'):
         return redirect(url_for('index'))
-    
+
     user = session['user']
 
     # Find events the user has created
@@ -258,7 +258,7 @@ def joinevent(eID):
         filter(UserEvent.EventID == eID). \
         count()
     # Get player limit of the event
-    maxUsers = dbSession.query(SportEvent).join(Sport). \
+    maxUsers = dbSession.query(Sport).join(SportEvent). \
         filter(SportEvent.EventID == eID). \
         first() .\
         PlayerLimit

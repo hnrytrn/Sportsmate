@@ -16,10 +16,10 @@
         <div class="row">
             {% for event in events %}
                 <div class="event col-md-3">
-                    <p>{{ event.SportName }}</p>
-                    <p>{{ event.Description }}</p>
-                    <p>{{ event.StartTime }}</p>
-                    <p>{{ event.EndTime }}</p>
+                    <p>Sport: {{ event.SportName }}</p>
+                    <p>Description: {{ event.Description }}</p>
+                    <p>Starts: {{ event.StartTime }}</p>
+                    <p>Ends: {{ event.EndTime }}</p>
                     <a href="{{ url_for('joinevent',eID = event.EventID) }}"><i class="fa fa-3x fa-sign-in" aria-hidden="true"></i></a>
                 </div>
             {% endfor %}

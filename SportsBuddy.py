@@ -160,10 +160,14 @@ def addevent():
 # Route for the user events page
 @app.route('/myevents')
 def myevents():
+    if not session.has_key('user'):
+        return redirect(url_for('index'))
+    
     user = session['user']
 
-    # Query SportEvent to find user events
+    # Find events the user has created
     events = dbSession.query(SportEvent). \
+        join(Location). \
         filter(user == SportEvent.CreatedBy). \
         all()
 
@@ -174,7 +178,7 @@ def myevents():
 def editevent(eventID, action):
     selectedEvent = dbSession.query(SportEvent).filter(SportEvent.EventID == eventID).first()
     # User chose to delete their event
-    if action == delete:
+    if action == "delete":
         # Delete the event
         dbSession.delete(selectedEvent)
         # Delete all the user events associated with that event
@@ -266,6 +270,13 @@ def joinevent(eID):
         dbSession.flush()
 
     return redirect(url_for('index'))
+
+
+# Route for exit page
+@app.route('/exit')
+def exit():
+    session.clear()
+    return render_template('exit.html')
 
 if __name__ == '__main__':
     app.run(debug = True)

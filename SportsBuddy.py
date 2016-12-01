@@ -128,10 +128,37 @@ def createevent():
     return render_template('create.html', sports=sports)
 
 # Add a new sport event form route
-# @app.route('addevent', methods=['POST'])
-# def addevent():
-#     if request.method == 'POST':
+@app.route('/addevent', methods=['POST'])
+def addevent():
+    if request.method == 'POST' and session['user']:
+        sport = request.form['sport']
+        description = request.form['description']
+        starttime = request.form['starttime']
+        endtime = request.form['endtime']
+        country = request.form['country']
+        city = request.form['city']
+        street = request.form['street']
+        postalcode = request.form['postalcode']
 
+        # Insert into Location and get the location id to insert the data into SportEvent
+
+        newLocation = Location(Country=country, City=city, Street=street, PostalCode=postalcode)
+        dbSession.add(newLocation)
+        dbSession.flush()
+        locID = dbSession.query(Location).order_by(Location.LocationID.desc()).first().LocationID
+
+        user = session['user']
+        newEvent = SportEvent(SportName=sport, Description=description, IsFull=0, StartTime=starttime, EndTime=endtime, LocationID=locID, CreatedBy=user)
+        dbSession.add(newEvent)
+        dbSession.flush()
+        eventID = dbSession.query(SportEvent).order_by(SportEvent.EventID.desc()).first().EventID
+
+        # Register the user who created the event
+        newUserEvent = UserEvent(Username=user, EventID=eventID)
+        dbSession.add(newUserEvent)
+        dbSession.flush()
+
+        return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug = True)

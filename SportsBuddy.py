@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, session
 from sqlalchemy import *
-from sqlalchemy.orm import create_session
+from sqlalchemy.orm import create_session, mapper
 from sqlalchemy.ext.declarative import declarative_base
 
 app = Flask(__name__)
@@ -40,13 +40,13 @@ class UserEvent(Base):
 
 dbSession = create_session(bind=engine)
 
+# All the available sports
+availSports = dbSession.query(Sport).all()
 
 # Homepage route
 @app.route('/')
 def index():
-    # Load all the available sports
-    sports = dbSession.query(Sport).all()
-    return render_template('index.html', sports = sports)
+    return render_template('index.html', sports = availSports)
 
 # Sport events page route
 @app.route('/sportevents/<sport>/<country>/<city>/<date>')
@@ -122,9 +122,7 @@ def authenticate():
 # Create sport event page route
 @app.route('/createevent')
 def createevent():
-    # Load all the available sports
-    sports = dbSession.query(Sport).all()
-    return render_template('create.html', sports=sports)
+    return render_template('create.html', sports=availSports)
 
 # Add a new sport event form route
 @app.route('/addevent', methods=['POST'])
@@ -171,23 +169,66 @@ def myevents():
 
     return render_template('myevents.html', events=events)
 
-# Route for the user to edit an event
-@app.route('/editevent')
-def editevent(eventID, delete):
-    selectedEvent = dbSession.query(SportEvent).filter(EventID=eventID).all()
+# Route when the user clicks an event to edit
+@app.route('/editevent/<eventID>/<action>')
+def editevent(eventID, action):
+    selectedEvent = dbSession.query(SportEvent).filter(SportEvent.EventID == eventID).first()
     # User chose to delete their event
-    if delete:
+    if action == delete:
         # Delete the event
         dbSession.delete(selectedEvent)
         # Delete all the user events associated with that event
-        userEventToDelete = dbSession.query(UserEvent).filter(EventID=eventID).all()
-        dbSession.delete(userEventToDelete)
-        session.flush()
-        render_template('myevents.html')
+        userEventToDelete = dbSession.query(UserEvent).filter(UserEvent.EventID == eventID).all()
+        for event in userEventToDelete:
+            dbSession.delete(event)
+
+        dbSession.flush()
+        return render_template('myevents.html')
     else:
-        return render_template('editevent.html', event=selectedEvent)
+        # Location of the event
+        location = dbSession.query(Location).filter(Location.LocationID == selectedEvent.LocationID).first()
+        return render_template('editevent.html', event=selectedEvent, sports=availSports, location=location)
 
+# Route for when the edit event form
+@app.route('/modifyevent/<eID>/<lID>', methods=['POST'])
+def modifyevent(eID, lID):
+    if request.method == 'POST':
+        sport = request.form['sport']
+        description = request.form['description']
+        starttime = request.form['starttime']
+        endtime = request.form['endtime']
+        country = request.form['country']
+        city = request.form['city']
+        street = request.form['street']
+        postalcode = request.form['postalcode']
 
+        # Update Location
+        location = dbSession.query(Location). \
+            filter(Location.LocationID == lID). \
+            first()
+
+        location.Country = country
+        location.City = city
+        location.Street = street
+        location.PostalCode = postalcode
+
+        dbSession.add(location)
+
+        # Update SportEvent
+        event = dbSession.query(SportEvent). \
+            filter(SportEvent.EventID == eID). \
+            first()
+
+        event.SportName = sport
+        event.Description = description
+        event.StartTime = starttime
+        event.EndTime = endtime
+
+        dbSession.add(event)
+
+        dbSession.flush()
+
+        return redirect(url_for('myevents'))
 
 if __name__ == '__main__':
     app.run(debug = True)

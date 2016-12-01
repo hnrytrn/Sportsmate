@@ -7,7 +7,7 @@
             <div class="col-md-10 col-md-offset-1">
                 <hr class="section-heading-spacer">
                 <div class="clearfix"></div>
-                <h2 class="section-heading">Sport Events</h2>
+                <h2 class="section-heading">My Events</h2>
             </div>
         </div>
     </div>
@@ -20,6 +20,8 @@
                     <p>{{ event.Description }}</p>
                     <p>{{ event.StartTime }}</p>
                     <p>{{ event.EndTime }}</p>
+                    <a href="{{ url_for('editevent',eventID = event.EventID, delete=False) }}"><i class="fa fa-3x fa-pencil-square-o" aria-hidden="true"></i></a>
+                    <a href="{{ url_for('editevent',eventID = event.EventID, delete=True) }}"><i class="fa fa-3x fa-times" aria-hidden="true"></i></a>
                 </div>
             {% endfor %}
         </div>

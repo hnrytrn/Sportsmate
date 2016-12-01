@@ -59,7 +59,6 @@ def sportevents(sport, country, city, date):
         filter(date == func.DATE(SportEvent.StartTime)).\
         all()
 
-    print events
     return render_template('events.html', events = events)
 
 # Login page route
@@ -160,8 +159,36 @@ def addevent():
 
         return redirect(url_for('index'))
 
+# Route for the user events page
+@app.route('/myevents')
+def myevents():
+    user = session['user']
+
+    # Query SportEvent to find user events
+    events = dbSession.query(SportEvent). \
+        filter(user == SportEvent.CreatedBy). \
+        all()
+
+    return render_template('myevents.html', events=events)
+
+# Route for the user to edit an event
+@app.route('/editevent')
+def editevent(eventID, delete):
+    selectedEvent = dbSession.query(SportEvent).filter(EventID=eventID).all()
+    # User chose to delete their event
+    if delete:
+        # Delete the event
+        dbSession.delete(selectedEvent)
+        # Delete all the user events associated with that event
+        userEventToDelete = dbSession.query(UserEvent).filter(EventID=eventID).all()
+        dbSession.delete(userEventToDelete)
+        session.flush()
+        render_template('myevents.html')
+    else:
+        return render_template('editevent.html', event=selectedEvent)
+
+
+
 if __name__ == '__main__':
     app.run(debug = True)
 
-# TODO
-# -make all form fields that are required required and accompany other form fields in the route

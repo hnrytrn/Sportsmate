@@ -1,134 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Sportsmate</title>
-
-    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-
-    <link href="{{ url_for('static', filename='css/landing-page.css') }}" rel="stylesheet">
-
-    <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-</head>
-
-<body>
-    <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
-        <div class="container topnav">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand topnav" href="{{ url_for('index') }}">Sportsmate</a>
-            </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="{{ url_for('createevent') }}">Create an Event</a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('login') }}">Login</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <div class="content-section-b">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-10 col-md-offset-1">
-                    <h2 class="section-heading">Login</h2>
-                    <div class="clearfix">
-                        {% if authError %}
-                        <p class=error><strong>Error:</strong> {{ authError }}
-                        {% endif %}
-                    </div>
-                    <form class="form" action="/authenticate" method=post>
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control" name="username" id="username" placeholder="Enter your username">
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password">
-                        </div>
-                        <button type="submit" class="btn btn-default">Login</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="content-section-a">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-10 col-md-offset-1">
-                    <h2 class="section-heading">Register</h2>
-                    <div class="clearfix">
-                        {% if error %}
-                        <p class=error><strong>Error:</strong> {{ error }}
+{% extends 'base.html' %}
+{% block content %}
+<div class="content-section-b">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <h2 class="section-heading">Login</h2>
+                <div class="clearfix">
+                    {% if authError %}
+                    <p class=error><strong>Error:</strong> {{ authError }}
                     {% endif %}
-                    </div>
-                    <form class="form" action="/register" method=post>
-                        <div class="form-group">
-                            <label for="fName">First Name</label>
-                            <input type="text" class="form-control" name="fName" id="fName" placeholder="Enter your first name">
-                        </div>
-                        <div class="form-group">
-                            <label for="lName">Last Name</label>
-                            <input type="text" class="form-control" name="lName" id="lName" placeholder="Enter your last name">
-                        </div>
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control" name="username" id="username" placeholder="Enter your username">
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password">
-                        </div>
-                        <button type="submit" class="btn btn-default">Register</button>
-                    </form>
                 </div>
+                <form class="form" action="/authenticate" method=post>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" name="username" id="username" placeholder="Enter your username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn btn-default">Login</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <ul class="list-inline">
-                        <li>
-                            <a href="{{ url_for('index') }}">Home</a>
-                        </li>
-                    </ul>
-                    <p class="copyright text-muted small">Copyright &copy; Sportsmate 2016. All Rights Reserved</p>
+<div class="content-section-a">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <h2 class="section-heading">Register</h2>
+                <div class="clearfix">
+                    {% if error %}
+                    <p class=error><strong>Error:</strong> {{ error }}
+                {% endif %}
                 </div>
+                <form class="form" action="/register" method=post>
+                    <div class="form-group">
+                        <label for="fName">First Name</label>
+                        <input type="text" class="form-control" name="fName" id="fName" placeholder="Enter your first name">
+                    </div>
+                    <div class="form-group">
+                        <label for="lName">Last Name</label>
+                        <input type="text" class="form-control" name="lName" id="lName" placeholder="Enter your last name">
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" name="username" id="username" placeholder="Enter your username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn btn-default">Register</button>
+                </form>
             </div>
         </div>
-    </footer>
-
-    <script src={{ url_for('static', filename='js/jquery.js') }}></script>
-    <script src={{ url_for('static', filename='js/bootstrap.min.js') }}></script>
-</body>
-
-</html>
+    </div>
+</div>
+{% endblock %}
